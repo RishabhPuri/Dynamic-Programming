@@ -40,7 +40,6 @@ unsigned int cutRodDp1 (unsigned int memo[], unsigned int len1)
 }
 
 /** bottom - up approach , solve smaler subproblems for a given problem */
-//unsigned int price[11] = {1,5,8,9,10,17,17,20,24,30};
 unsigned int cutRodDp2(unsigned int optSize[], unsigned int memo[], unsigned int len1)
 {
   unsigned int maxVal=0, i , j;
