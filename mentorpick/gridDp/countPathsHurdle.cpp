@@ -21,6 +21,12 @@ long long countPathsRec(int m[MAX_R][MAX_C], int r, int c, int i, int j)
 
 long long countPathsBu(int m[MAX_R][MAX_C], int r, int c)
 {
+
+  /** In this appproach , a mistake could be that for
+    * first row , first column , we might be tempted to 
+    * set dp[i][j] =1 if m[i][j] != -1 , no hurdle, BUT BUT
+    * if assume 2 row first column is a hurdle , then all column
+    * from 3rd row to nth row will become inaccessible */
 	int dp[r][c];
   	for (int i=0;i<r;i++)
       for(int j=0;j<c;j++)
