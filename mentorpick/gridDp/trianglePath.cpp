@@ -50,6 +50,17 @@ int maxSumInTriTd(vector< vector<int> > mat, int i, int j)
 }
 #endif
 
+/* The space complexity in this question was O(C)
+*  dp[i%2][j] = mat[i][j] + Math.max( dp[(i+1)%2][j], dp[(i+1)%2][j+1]) 
+  i=0 
+    dp[0][j] = mat[0][j] + Math.max(dp[1][j], dp[1][j+1]) 
+  i=1 
+    dp[1][j] = mat[1][j] + Math.max(dp[0][j], dp[0][j+1]) 
+  i=2 
+    dp[0][j] = mat[0][j] + Math.max(dp[1][j], dp[1][j+1]) 
+ 
+SPACE:  2 * C 
+*/
 
 int maxSumInTriBu(vector< vector<int> > mat, int i, int j)
 {
