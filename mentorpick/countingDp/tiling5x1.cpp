@@ -50,3 +50,18 @@ int main()
 
 	return 0;
 }
+
+/** 
+Let dp[i] denotes number of ways of arranging 5xi sized block with 5x1 and 5x2 tiles.
+
+By arranging 5x1 and 5x2 tiles in various ways in vertical and horizantal positions and observing, we can initialise a dp in following way. 
+
+dp = [1, 1, 2, 3, 5, 16]
+
+If we put these ways on paper, we can observe that out of 16 ways in filling 5x5 sized block, 8 ways are covered in previous fillings. 
+
+
+Recurrence relation can be given as 
+
+dp[n] = dp[n-1] + dp[n-2] + 8*dp[n-5]. 
+*/
