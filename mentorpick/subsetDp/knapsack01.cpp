@@ -8,6 +8,8 @@ using namespace std;
 vector<long long> weight;
 vector<long long> val;
 
+vector<vector<long long>> dp;
+
 /** Thought process 
     Counting DP : we need to count , which eventually became 2 things
          1. Either a GP series 
@@ -23,6 +25,26 @@ vector<long long> val;
     with knapsack and subset dp problem we have a new way of solving problems 
     include in subproblem or not 
 */
+
+
+long long knapsackSolTd(long cap, long itemCount)
+{
+  if (cap<=0)
+    return 0;
+
+  if (itemCount <=0)
+    return 0;
+
+  if (dp[cap][itemCount]!=-1)
+    return dp[cap][itemCount];
+
+  if (cap-weight[itemCount-1] < 0)
+    return dp[cap][itemCount] = knapsackSolTd(cap, itemCount-1);
+
+  /** include the last item, or not*/
+  return dp[cap][itemCount] = max (knapsackSolTd(cap-weight[itemCount-1],itemCount-1)+val[itemCount-1],
+              knapsackSolTd(cap, itemCount-1));
+}
 
 long long knapsackSolRec(long cap, long itemCount)
 {
@@ -42,7 +64,9 @@ long long knapsackSolRec(long cap, long itemCount)
 
 long long knapsackSol(long cap, long itemCount)
 {
-  return knapsackSolRec(cap, itemCount);
+  dp.resize(cap+5, vector<long long>(itemCount+5, -1));
+  //return knapsackSolRec(cap, itemCount);
+  return knapsackSolTd(cap, itemCount);
 }
 
 int main()
