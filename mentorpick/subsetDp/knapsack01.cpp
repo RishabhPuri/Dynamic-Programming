@@ -8,8 +8,7 @@ using namespace std;
 vector<long long> weight;
 vector<long long> val;
 
-vector<vector<long long>> dp;
-
+long long dp[2005][5005];
 /** Thought process 
     Counting DP : we need to count , which eventually became 2 things
          1. Either a GP series 
@@ -26,6 +25,26 @@ vector<vector<long long>> dp;
     include in subproblem or not 
 */
 
+long long knapsackSolBu(long cap, long itemCount)
+{
+  for (int i=0;i <=itemCount;i++) { 
+    for (int j=0;j<=cap;j++) {
+
+      /** Think : whats the max val when bag cap is 0 or weight of item is 0*/
+      if ((i==0)||(j==0))
+        dp[i][j] = 0;
+      else {
+        if (j - weight[i-1] < 0)
+          dp[i][j] = dp[i-1][j];
+        else
+          dp[i][j] = max( (val[i-1] + dp[i-1][j-weight[i-1]]), 
+              dp[i-1][j]);
+      }
+    }
+  }
+  return dp[itemCount][cap];
+}
+
 
 long long knapsackSolTd(long cap, long itemCount)
 {
@@ -35,14 +54,14 @@ long long knapsackSolTd(long cap, long itemCount)
   if (itemCount <=0)
     return 0;
 
-  if (dp[cap][itemCount]!=-1)
-    return dp[cap][itemCount];
+  if (dp[itemCount][cap]!=-1)
+    return dp[itemCount][cap];
 
   if (cap-weight[itemCount-1] < 0)
-    return dp[cap][itemCount] = knapsackSolTd(cap, itemCount-1);
+    return dp[itemCount][cap] = knapsackSolTd(cap, itemCount-1);
 
   /** include the last item, or not*/
-  return dp[cap][itemCount] = max (knapsackSolTd(cap-weight[itemCount-1],itemCount-1)+val[itemCount-1],
+  return dp[itemCount][cap] = max (knapsackSolTd(cap-weight[itemCount-1],itemCount-1)+val[itemCount-1],
               knapsackSolTd(cap, itemCount-1));
 }
 
@@ -63,10 +82,13 @@ long long knapsackSolRec(long cap, long itemCount)
 }
 
 long long knapsackSol(long cap, long itemCount)
-{
-  dp.resize(cap+5, vector<long long>(itemCount+5, -1));
+{ 
+  for (int i=0;i<2005;i++)
+    for(int j=0;j<5005;j++)
+      dp[i][j]=-1;
   //return knapsackSolRec(cap, itemCount);
-  return knapsackSolTd(cap, itemCount);
+  //return knapsackSolTd(cap, itemCount);
+  return knapsackSolBu(cap, itemCount);
 }
 
 int main()
