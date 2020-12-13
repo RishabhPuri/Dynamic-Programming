@@ -25,6 +25,47 @@ long long dp[2005][5005];
     include in subproblem or not 
 */
 
+
+/** 
+  Table  cap is 7, itemCount = 4
+    
+                   0 1 2 3 4 5 6 7
+ itemCount%2       x x x x x x x x
+ itemCount%2       x x x x x x x x
+
+  actual table:  
+                   0 1 2 3 4 5 6 7
+ itemCount[1]      0 0 0 0 0 0 0 0
+ itemCount[2]      0 1 1 1 1 1 1 1
+ itemCount[3]      0 1 1 4 5 5 5 5
+ itemCount[4]      0 x x x x x x x
+ itemCount[5]      0 x x x x x x x
+  
+  In the actual table we see that result depends on the row just above it,
+  so in essence we just need 2 rows to solve this dp 
+                
+*/
+
+long long knapsackSolBuSpaceSave(long cap, long itemCount)
+{
+  for (int i=0;i<=itemCount;i++) {
+    for(int j=0;j<=cap;j++) {
+      if (i==0)
+        dp[i][j] = 0;
+      else { 
+        if (j - weight[i-1] < 0)
+          dp[i%2][j] = dp[(i-1)%2][j];
+        else
+          dp[i%2][j] = max( (val[i-1] + dp[(i-1)%2][j-weight[i-1]]), 
+              dp[(i-1)%2][j]);
+          
+      }  
+    }
+  }
+
+  return dp[itemCount%2][cap];
+}
+
 long long knapsackSolBu(long cap, long itemCount)
 {
   for (int i=0;i <=itemCount;i++) { 
@@ -34,6 +75,8 @@ long long knapsackSolBu(long cap, long itemCount)
       if ((i==0)||(j==0))
         dp[i][j] = 0;
       else {
+        /** When the 2d matrix is created for all weights of bag less than item weight 
+           we can see that the value of cell just above the current cell can be copied */
         if (j - weight[i-1] < 0)
           dp[i][j] = dp[i-1][j];
         else
@@ -82,13 +125,20 @@ long long knapsackSolRec(long cap, long itemCount)
 }
 
 long long knapsackSol(long cap, long itemCount)
-{ 
+{
+#if 0 
   for (int i=0;i<2005;i++)
     for(int j=0;j<5005;j++)
       dp[i][j]=-1;
   //return knapsackSolRec(cap, itemCount);
   //return knapsackSolTd(cap, itemCount);
   return knapsackSolBu(cap, itemCount);
+#else
+  for (int i=0;i<2;i++)
+    for (int j=0;j<5005;j++)
+      dp[i][j] = -1;
+  return knapsackSolBuSpaceSave(cap, itemCount);
+#endif
 }
 
 int main()
